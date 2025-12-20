@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormaPlus - Formations Continues</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Forma<span>Plus</span></h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Accueil</a></li>
+                    <li><a href="formations.html">Formations</a></li>
+                    <li><a href="inscription.html">Inscription</a></li>
+                    <li><a href="dashboard.html">Mon Compte</a></li>
+                </ul>
+                <div class="auth-buttons" id="authButtons">
+                    <!-- Dynamiquement rempli par JavaScript -->
+                </div>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Développez vos compétences avec nos formations continues</h2>
+                <p>Inscrivez-vous à nos formations professionnelles certifiantes et bénéficiez d'un accompagnement personnalisé pour booster votre carrière.</p>
+                <div class="hero-buttons">
+                    <a href="formations.html" class="btn btn-primary">Voir les formations</a>
+                    <a href="inscription.html" class="btn btn-secondary">S'inscrire maintenant</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Formation professionnelle">
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistiques -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3>2,500+</h3>
+                    <p>Apprenants formés</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>50+</h3>
+                    <p>Formations disponibles</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>95%</h3>
+                    <p>Taux de satisfaction</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>85%</h3>
+                    <p>Insertion professionnelle</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formations en vedette -->
+    <section class="featured-formations">
+        <div class="container">
+            <h2 class="section-title">Formations en vedette</h2>
+            <div class="formations-grid" id="featuredFormations">
+                <!-- Chargé dynamiquement -->
+            </div>
+            <div class="text-center">
+                <a href="formations.html" class="btn btn-outline">Voir toutes les formations</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Témoignages -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Ce que disent nos apprenants</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Une formation exceptionnelle qui m'a permis de me reconvertir professionnellement. Les formateurs sont experts et disponibles."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Marie">
+                        <div>
+                            <h4>Marie Dubois</h4>
+                            <span>Développeuse Full Stack</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Le contenu est à jour et très pratique. J'ai pu appliquer directement les connaissances dans mon travail."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Thomas">
+                        <div>
+                            <h4>Thomas Martin</h4>
+                            <span>Data Analyst</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Un accompagnement personnalisé et une équipe pédagogique réactive. Je recommande vivement !"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sophie">
+                        <div>
+                            <h4>Sophie Lambert</h4>
+                            <span>Chef de Projet Digital</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>FormaPlus</h3>
+                    <p>Organisme de formation continue certifié Qualiopi. Nous proposons des formations professionnelles adaptées aux besoins du marché.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Liens rapides</h3>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="formations.html">Formations</a></li>
+                        <li><a href="inscription.html">Inscription</a></li>
+                        <li><a href="dashboard.html">Mon Compte</a></li>
+                        <li><a href="admin.html">Espace Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Rue de la Formation, 75000 Paris</li>
+                        <li><i class="fas fa-phone"></i> 01 23 45 67 89</li>
+                        <li><i class="fas fa-envelope"></i> contact@formapius.fr</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Inscrivez-vous pour recevoir nos dernières formations</p>
+                    <form id="newsletterForm">
+                        <input type="email" placeholder="Votre email" required>
+                        <button type="submit" class="btn btn-primary">S'abonner</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 FormaPlus. Tous droits réservés. | <a href="#">Mentions légales</a> | <a href="#">Politique de confidentialité</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/formations.js"></script>
+    <script>
+        // Charger les formations en vedette
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeaturedFormations();
+        });
+
+        // Menu mobile
+        document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

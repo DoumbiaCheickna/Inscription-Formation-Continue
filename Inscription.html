@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail d'inscription - Formations Continues</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #1abc9c;
+            --light-color: #f8f9fa;
+            --dark-color: #2c3e50;
+            --gray-color: #95a5a6;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--secondary-color);
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .auth-buttons button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn {
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            margin-right: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .signup-btn {
+            background-color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            color: white;
+        }
+
+        .signup-btn:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        /* Hero section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: #16a085;
+        }
+
+        /* Formations section */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+            color: var(--primary-color);
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .formations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .formation-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .formation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .formation-image {
+            height: 180px;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .formation-content {
+            padding: 25px;
+        }
+
+        .formation-category {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .formation-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .formation-description {
+            color: var(--gray-color);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .formation-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .formation-details span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .formation-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .inscription-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .inscription-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Formulaire d'inscription */
+        .inscription-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input {
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 40px auto 0;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #16a085;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            position: relative;
+            animation: modalAppear 0.3s;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--gray-color);
+        }
+
+        .modal h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .success-message {
+            background-color: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success-message p {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .section-title h2 {
+                font-size: 26px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 0;
+            }
+
+            .inscription-section {
+                padding: 25px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Forma<span>Plus</span></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#accueil" class="active">Accueil</a></li>
+                        <li><a href="#formations">Formations</a></li>
+                        <li><a href="#inscription">Inscription</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="login-btn">Connexion</button>
+                    <button class="signup-btn">Espace formateur</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero section -->
+    <section class="hero" id="accueil">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Développez vos compétences avec nos formations continues</h2>
+                <p>Inscrivez-vous à nos formations professionnelles certifiantes et bénéficiez d'un accompagnement personnalisé pour booster votre carrière.</p>
+                <a href="#inscription" class="cta-button">S'inscrire maintenant</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formations disponibles -->
+    <section id="formations">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nos formations disponibles</h2>
+                <p>Découvrez notre catalogue de formations continues, conçues pour répondre aux besoins du marché actuel.</p>
+            </div>
+            
+            <div class="formations-grid">
+                <!-- Formation 1 -->
+                <div class="formation-card">
+                    <div class="formation-image" style="background-color: #3498db;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="formation-content">
+                        <span class="formation-category">Développement Web</span>
+                        <h3 class="formation-title">Full Stack JavaScript</h3>
+                        <p class="formation-description">Maîtrisez les technologies JavaScript modernes pour devenir développeur full stack.</p>
+                        <div class="formation-details">
+                            <span><i class="far fa-clock"></i> 120 heures</span>
+                            <span><i class="fas fa-calendar-alt"></i> 6 semaines</span>
+                            <span><i class="fas fa-user-friends"></i> 15 places</span>
+                        </div>
+                        <div class="formation-price">1 850 €</div>
+                        <button class="inscription-btn" data-formation="Full Stack JavaScript">S'inscrire à cette formation</button>
+                    </div>
+                </div>
+                
+                <!-- Formation 2 -->
+                <div class="formation-card">
+                    <div class="formation-image" style="background-color: #2ecc71;">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="formation-content">
+                        <span class="formation-category">Data Science</span>
+                        <h3 class="formation-title">Analyse de données avec Python</h3>
+                        <p class="formation-description">Apprenez à analyser et visualiser des données avec les bibliothèques Python.</p>
+                        <div class="formation-details">
+                            <span><i class="far fa-clock"></i> 90 heures</span>
+                            <span><i class="fas fa-calendar-alt"></i> 4 semaines</span>
+                            <span><i class="fas fa-user-friends"></i> 12 places</span>
+                        </div>
+                        <div class="formation-price">1 650 €</div>
+                        <button class="inscription-btn" data-formation="Analyse de données avec Python">S'inscrire à cette formation</button>
+                    </div>
+                </div>
+                
+                <!-- Formation 3 -->
+                <div class="formation-card">
+                    <div class="formation-image" style="background-color: #e74c3c;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="formation-content">
+                        <span class="formation-category">Cybersécurité</span>
+                        <h3 class="formation-title">Sécurité des systèmes d'information</h3>
+                        <p class="formation-description">Protégez les systèmes informatiques contre les cybermenaces.</p>
+                        <div class="formation-details">
+                            <span><i class="far fa-clock"></i> 150 heures</span>
+                            <span><i class="fas fa-calendar-alt"></i> 8 semaines</span>
+                            <span><i class="fas fa-user-friends"></i> 10 places</span>
+                        </div>
+                        <div class="formation-price">2 200 €</div>
+                        <button class="inscription-btn" data-formation="Sécurité des systèmes d'information">S'inscrire à cette formation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulaire d'inscription -->
+    <section id="inscription">
+        <div class="container">
+            <div class="section-title">
+                <h2>Inscription à une formation</h2>
+                <p>Remplissez ce formulaire pour vous inscrire à l'une de nos formations continues.</p>
+            </div>
+            
+            <div class="inscription-section">
+                <form id="inscriptionForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom *</label>
+                            <input type="text" id="nom" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">Prénom *</label>
+                            <input type="text" id="prenom" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Adresse email *</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone">Téléphone *</label>
+                            <input type="tel" id="telephone" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="formation">Formation choisie *</label>
+                        <select id="formation" class="form-select" required>
+                            <option value="">Sélectionnez une formation</option>
+                            <option value="Full Stack JavaScript">Full Stack JavaScript</option>
+                            <option value="Analyse de données avec Python">Analyse de données avec Python</option>
+                            <option value="Sécurité des systèmes d'information">Sécurité des systèmes d'information</option>
+                            <option value="Marketing digital">Marketing digital</option>
+                            <option value="Gestion de projet agile">Gestion de projet agile</option>
+                            <option value="Intelligence artificielle">Intelligence artificielle</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mode de formation *</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="presentiel" name="mode" value="Présentiel" required>
+                                <label for="presentiel">Présentiel</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="distanciel" name="mode" value="Distanciel">
+                                <label for="distanciel">Distanciel</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="hybride" name="mode" value="Hybride">
+                                <label for="hybride">Hybride</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="entreprise">Entreprise (si inscription professionnelle)</label>
+                        <input type="text" id="entreprise" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="financement">Mode de financement *</label>
+                        <select id="financement" class="form-select" required>
+                            <option value="">Sélectionnez un mode de financement</option>
+                            <option value="Personnel">Financement personnel</option>
+                            <option value="Entreprise">Financement entreprise</option>
+                            <option value="CPF">Compte Personnel de Formation (CPF)</option>
+                            <option value="PoleEmploi">Pôle Emploi</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message complémentaire</label>
+                        <textarea id="message" class="form-control" rows="4" placeholder="Précisez vos attentes ou toute information utile..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="conditions" required>
+                            <label for="conditions">J'accepte les conditions générales d'inscription et la politique de confidentialité *</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="newsletter">
+                            <label for="newsletter">Je souhaite recevoir la newsletter pour être informé des nouvelles formations</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Soumettre mon inscription</button>
+                    
+                    <div class="success-message" id="successMessage">
+                        <p><i class="fas fa-check-circle"></i> Votre inscription a été soumise avec succès ! Nous vous contacterons dans les plus brefs délais.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>FormaPlus</h3>
+                    <p>Organisme de formation continue certifié Qualiopi. Nous proposons des formations professionnelles adaptées aux besoins du marché.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Liens rapides</h3>
+                    <ul>
+                        <li><a href="#accueil">Accueil</a></li>
+                        <li><a href="#formations">Formations</a></li>
+                        <li><a href="#inscription">Inscription</a></li>
+                        <li><a href="#">Espace formateur</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Rue de la Formation, 75000 Paris</li>
+                        <li><i class="fas fa-phone"></i> 01 23 45 67 89</li>
+                        <li><i class="fas fa-envelope"></i> contact@formapius.fr</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 FormaPlus. Tous droits réservés. | <a href="#">Mentions légales</a> | <a href="#">Politique de confidentialité</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de confirmation -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Inscription confirmée</h3>
+            <p>Merci <span id="modalNom"></span> pour votre inscription !</p>
+            <p>Vous recevrez un email de confirmation concernant votre inscription à la formation <strong id="modalFormation"></strong> dans les prochaines heures.</p>
+            <p>Notre équipe pédagogique prendra contact avec vous pour finaliser votre dossier.</p>
+            <div style="margin-top: 30px; text-align: center;">
+                <button class="cta-button" id="closeModalBtn">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion de la soumission du formulaire
+        document.getElementById('inscriptionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Récupération des données du formulaire
+            const nom = document.getElementById('nom').value;
+            const prenom = document.getElementById('prenom').value;
+            const formation = document.getElementById('formation').value;
+            
+            // Mise à jour du modal
+            document.getElementById('modalNom').textContent = prenom + ' ' + nom;
+            document.getElementById('modalFormation').textContent = formation;
+            
+            // Affichage du modal
+            document.getElementById('confirmationModal').style.display = 'flex';
+            
+            // Réinitialisation du formulaire (optionnel)
+            // document.getElementById('inscriptionForm').reset();
+            
+            // Affichage du message de succès
+            document.getElementById('successMessage').style.display = 'block';
+        });
+        
+        // Gestion des boutons d'inscription sur les cartes de formation
+        const inscriptionBtns = document.querySelectorAll('.inscription-btn');
+        inscriptionBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const formation = this.getAttribute('data-formation');
+                document.getElementById('formation').value = formation;
+                
+                // Scroll vers le formulaire
+                document.getElementById('inscription').scrollIntoView({ behavior: 'smooth' });
+                
+                // Focus sur le premier champ du formulaire
+                document.getElementById('nom').focus();
+            });
+        });
+        
+        // Gestion du bouton CTA
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('inscription').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Gestion de la fermeture du modal
+        document.querySelector('.close-modal').addEventListener('click', function() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        });
+        
+        document.getElementById('closeModalBtn').addEventListener('click', function() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        });
+        
+        // Fermeture du modal en cliquant en dehors
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('confirmationModal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Navigation fluide
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    // Mise à jour du lien actif
+                    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Scroll vers la section
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Gestion des boutons d'authentification
+        document.querySelector('.login-btn').addEventListener('click', function() {
+            alert("Fonctionnalité de connexion à implémenter");
+        });
+        
+        document.querySelector('.signup-btn').addEventListener('click', function() {
+            alert("Espace formateur à implémenter");
+        });
+    </script>
+</body>
+</html>

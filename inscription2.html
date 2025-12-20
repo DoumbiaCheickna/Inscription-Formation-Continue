@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - FormaPlus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Forma<span>Plus</span></h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="formations.html">Formations</a></li>
+                    <li><a href="inscription.html" class="active">Inscription</a></li>
+                    <li><a href="dashboard.html">Mon Compte</a></li>
+                </ul>
+                <div class="auth-buttons" id="authButtons">
+                    <!-- Chargé dynamiquement -->
+                </div>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Inscription -->
+    <section class="inscription-section">
+        <div class="container">
+            <div class="inscription-header">
+                <h1>Inscription à une formation</h1>
+                <p>Remplissez ce formulaire pour vous inscrire à l'une de nos formations continues</p>
+            </div>
+
+            <div class="inscription-wizard">
+                <!-- Steps -->
+                <div class="wizard-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Informations personnelles</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Choix de la formation</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Financement</div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Confirmation</div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="inscriptionForm">
+                    <!-- Step 1: Personal Info -->
+                    <div class="wizard-step active" id="step1">
+                        <h2><i class="fas fa-user"></i> Informations personnelles</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nom">Nom *</label>
+                                <input type="text" id="nom" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prenom">Prénom *</label>
+                                <input type="text" id="prenom" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telephone">Téléphone *</label>
+                                <input type="tel" id="telephone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adresse">Adresse</label>
+                                <input type="text" id="adresse">
+                            </div>
+                            <div class="form-group">
+                                <label for="ville">Ville</label>
+                                <input type="text" id="ville">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="codePostal">Code postal</label>
+                                <input type="text" id="codePostal">
+                            </div>
+                            <div class="form-group">
+                                <label for="pays">Pays</label>
+                                <select id="pays">
+                                    <option value="France">France</option>
+                                    <option value="Belgique">Belgique</option>
+                                    <option value="Suisse">Suisse</option>
+                                    <option value="Luxembourg">Luxembourg</option>
+                                    <option value="Autre">Autre</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="wizard-buttons">
+                            <button type="button" class="btn btn-primary next-step" data-next="2">
+                                Suivant <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Formation Choice -->
+                    <div class="wizard-step" id="step2">
+                        <h2><i class="fas fa-book"></i> Choix de la formation</h2>
+                        
+                        <div class="selected-formation" id="selectedFormationCard">
+                            <!-- Chargé dynamiquement -->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="formation">Formation choisie *</label>
+                            <select id="formation" required>
+                                <option value="">Sélectionnez une formation</option>
+                                <!-- Chargé dynamiquement -->
+                            </select>
+                            <div class="form-hint">
+                                <a href="formations.html">Voir toutes les formations</a>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Mode de formation *</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="presentiel" name="mode" value="Présentiel" required>
+                                    <label for="presentiel">
+                                        <i class="fas fa-users"></i>
+                                        <div>
+                                            <strong>Présentiel</strong>
+                                            <small>En centre de formation</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="distanciel" name="mode" value="Distanciel">
+                                    <label for="distanciel">
+                                        <i class="fas fa-laptop-house"></i>
+                                        <div>
+                                            <strong>Distanciel</strong>
+                                            <small>100% en ligne</small>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="hybride" name="mode" value="Hybride">
+                                    <label for="hybride">
+                                        <i class="fas fa-blender-phone"></i>
+                                        <div>
+                                            <strong>Hybride</strong>
+                                            <small>Mix présentiel/distanciel</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="session">Session choisie *</label>
+                            <select id="session" required>
+                                <option value="">Sélectionnez une session</option>
+                                <option value="2024-03-01">Mars 2024 (01/03 - 30/04)</option>
+                                <option value="2024-05-01">Mai 2024 (01/05 - 30/06)</option>
+                                <option value="2024-09-01">Septembre 2024 (01/09 - 31/10)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="wizard-buttons">
+                            <button type="button" class="btn btn-outline prev-step" data-prev="1">
+                                <i class="fas fa-arrow-left"></i> Précédent
+                            </button>
+                            <button type="button" class="btn btn-primary next-step" data-next="3">
+                                Suivant <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Financement -->
+                    <div class="wizard-step" id="step3">
+                        <h2><i class="fas fa-euro-sign"></i> Financement</h2>
+                        
+                        <div class="form-group">
+                            <label for="entreprise">Entreprise (si inscription professionnelle)</label>
+                            <input type="text" id="entreprise">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="financement">Mode de financement *</label>
+                            <select id="financement" required>
+                                <option value="">Sélectionnez un mode de financement</option>
+                                <option value="personnel">Financement personnel</option>
+                                <option value="entreprise">Financement entreprise</option>
+                                <option value="cpf">Compte Personnel de Formation (CPF)</option>
+                                <option value="pole_emploi">Pôle Emploi</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="financement-details" id="financementDetails">
+                            <!-- Détails spécifiques au financement -->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Informations complémentaires</label>
+                            <textarea id="message" rows="4" placeholder="Précisions sur le financement, besoins spécifiques..."></textarea>
+                        </div>
+                        
+                        <div class="wizard-buttons">
+                            <button type="button" class="btn btn-outline prev-step" data-prev="2">
+                                <i class="fas fa-arrow-left"></i> Précédent
+                            </button>
+                            <button type="button" class="btn btn-primary next-step" data-next="4">
+                                Suivant <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Confirmation -->
+                    <div class="wizard-step" id="step4">
+                        <h2><i class="fas fa-check-circle"></i> Confirmation</h2>
+                        
+                        <div class="confirmation-summary">
+                            <div class="summary-section">
+                                <h3><i class="fas fa-user"></i> Informations personnelles</h3>
+                                <div class="summary-content" id="summaryPersonal"></div>
+                            </div>
+                            
+                            <div class="summary-section">
+                                <h3><i class="fas fa-book"></i> Formation choisie</h3>
+                                <div class="summary-content" id="summaryFormation"></div>
+                            </div>
+                            
+                            <div class="summary-section">
+                                <h3><i class="fas fa-euro-sign"></i> Financement</h3>
+                                <div class="summary-content" id="summaryFinancement"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group terms-section">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="conditions" required>
+                                <label for="conditions">
+                                    J'accepte les <a href="#">conditions générales d'inscription</a> *
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="rgpd" required>
+                                <label for="rgpd">
+                                    J'accepte la <a href="#">politique de confidentialité</a> *
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="newsletter">
+                                <label for="newsletter">
+                                    Je souhaite recevoir la newsletter et les offres promotionnelles
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="wizard-buttons">
+                            <button type="button" class="btn btn-outline prev-step" data-prev="3">
+                                <i class="fas fa-arrow-left"></i> Précédent
+                            </button>
+                            <button type="submit" class="btn btn-success" id="submitInscription">
+                                <i class="fas fa-paper-plane"></i> Soumettre mon inscription
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="inscription-help">
+                <div class="help-card">
+                    <i class="fas fa-question-circle"></i>
+                    <h3>Besoin d'aide ?</h3>
+                    <p>Notre équipe est à votre disposition pour vous accompagner dans votre inscription.</p>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> 01 23 45 67 89</p>
+                        <p><i class="fas fa-envelope"></i> inscription@formapius.fr</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <!-- Même footer que index.html -->
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-success">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Inscription réussie !</h2>
+                <p>Votre inscription a été enregistrée avec succès.</p>
+                <p>Vous recevrez un email de confirmation dans les prochaines minutes.</p>
+                <div class="success-actions">
+                    <a href="dashboard.html" class="btn btn-primary">
+                        <i class="fas fa-user"></i> Accéder à mon compte
+                    </a>
+                    <a href="formations.html" class="btn btn-outline">
+                        <i class="fas fa-book"></i> Voir d'autres formations
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/formations.js"></script>
+    <script src="js/inscriptions.js"></script>
+    
+    <style>
+        .inscription-section {
+            padding: 60px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .inscription-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .inscription-header h1 {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .wizard-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #e1e5e9;
+            z-index: 1;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e1e5e9;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+        
+        .step.active .step-number {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .step.active .step-label {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .wizard-step {
+            display: none;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+        
+        .wizard-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .wizard-step h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .radio-option input {
+            display: none;
+        }
+        
+        .radio-option label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .radio-option input:checked + label {
+            border-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .radio-option label i {
+            font-size: 24px;
+            color: var(--secondary-color);
+        }
+        
+        .wizard-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .selected-formation {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .confirmation-summary {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 30px;
+        }
+        
+        .summary-section {
+            margin-bottom: 25px;
+        }
+        
+        .summary-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .summary-content {
+            padding-left: 30px;
+        }
+        
+        .terms-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e1e5e9;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            margin-top: 5px;
+        }
+        
+        .inscription-help {
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .help-card {
+            display: inline-block;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            max-width: 400px;
+        }
+        
+        .help-card i {
+            font-size: 48px;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .contact-info {
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .modal-success {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+        
+        .success-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .radio-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .wizard-step {
+                padding: 25px;
+            }
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inscriptionManager = new InscriptionManager();
+            inscriptionManager.init();
+        });
+    </script>
+</body>
+</html>

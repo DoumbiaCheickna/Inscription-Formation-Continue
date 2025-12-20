@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Tableau de Bord - FormaPlus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Forma<span>Plus</span></h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="formations.html">Formations</a></li>
+                    <li><a href="dashboard.html" class="active">Mon Compte</a></li>
+                </ul>
+                <div class="user-menu" id="userMenu">
+                    <!-- Chargé dynamiquement -->
+                </div>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar">
+                <div class="user-profile">
+                    <div class="profile-image">
+                        <img id="userAvatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profil">
+                        <span class="online-status"></span>
+                    </div>
+                    <h3 id="userName">Chargement...</h3>
+                    <p id="userEmail">Chargement...</p>
+                </div>
+                
+                <nav class="dashboard-nav">
+                    <ul>
+                        <li><a href="#profile" class="active"><i class="fas fa-user"></i> Profil</a></li>
+                        <li><a href="#formations"><i class="fas fa-book"></i> Mes Formations</a></li>
+                        <li><a href="#certifications"><i class="fas fa-certificate"></i> Certifications</a></li>
+                        <li><a href="#payments"><i class="fas fa-credit-card"></i> Paiements</a></li>
+                        <li><a href="#messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                        <li><a href="#settings"><i class="fas fa-cog"></i> Paramètres</a></li>
+                        <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-content">
+                <!-- Section Profil -->
+                <section

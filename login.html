@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - FormaPlus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Forma<span>Plus</span></h1>
+                </div>
+                <h2>Connexion</h2>
+                <p>Accédez à votre espace personnel</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" required>
+                    <div class="password-toggle">
+                        <i class="fas fa-eye" id="togglePassword"></i>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label>
+                        <input type="checkbox" id="remember">
+                        Se souvenir de moi
+                    </label>
+                    <a href="#" id="forgotPassword">Mot de passe oublié ?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+                
+                <div class="auth-divider">
+                    <span>ou continuer avec</span>
+                </div>
+                
+                <button type="button" class="btn btn-google" id="googleLogin">
+                    <i class="fab fa-google"></i> Google
+                </button>
+                
+                <div class="auth-footer">
+                    <p>Pas encore de compte ? <a href="register.html">S'inscrire</a></p>
+                    <a href="index.html" class="back-home">
+                        <i class="fas fa-arrow-left"></i> Retour à l'accueil
+                    </a>
+                </div>
+            </form>
+            
+            <div class="auth-message" id="authMessage"></div>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Toggle password visibility
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.classList.toggle('fa-eye');
+                togglePassword.classList.toggle('fa-eye-slash');
+            });
+            
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                const messageEl = document.getElementById('authMessage');
+                messageEl.textContent = '';
+                messageEl.className = 'auth-message';
+                
+                try {
+                    await loginUser(email, password);
+                    messageEl.textContent = 'Connexion réussie ! Redirection...';
+                    messageEl.classList.add('success');
+                    
+                    // Redirection après 2 secondes
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } catch (error) {
+                    messageEl.textContent = error.message;
+                    messageEl.classList.add('error');
+                }
+            });
+            
+            // Google login
+            document.getElementById('googleLogin').addEventListener('click', async () => {
+                try {
+                    await loginWithGoogle();
+                    window.location.href = 'dashboard.html';
+                } catch (error) {
+                    const messageEl = document.getElementById('authMessage');
+                    messageEl.textContent = error.message;
+                    messageEl.classList.add('error');
+                }
+            });
+            
+            // Forgot password
+            document.getElementById('forgotPassword').addEventListener('click', async (e) => {
+                e.preventDefault();
+                const email = prompt('Entrez votre email pour réinitialiser le mot de passe :');
+                if (email) {
+                    try {
+                        await resetPassword(email);
+                        alert('Un email de réinitialisation a été envoyé !');
+                    } catch (error) {
+                        alert('Erreur : ' + error.message);
+                    }
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-header .logo {
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .auth-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .auth-header p {
+            color: var(--gray-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            cursor: pointer;
+            color: var(--gray-color);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .form-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .btn-block {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .auth-divider {
+            text-align: center;
+            position: relative;
+            margin: 25px 0;
+        }
+        
+        .auth-divider span {
+            background: white;
+            padding: 0 15px;
+            color: var(--gray-color);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e1e5e9;
+        }
+        
+        .btn-google {
+            width: 100%;
+            background: white;
+            border: 2px solid #e1e5e9;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-google:hover {
+            background: #f8f9fa;
+            border-color: #ddd;
+        }
+        
+        .auth-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .auth-footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        
+        .back-home {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--gray-color);
+        }
+        
+        .auth-message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .auth-message.success {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .auth-message.error {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+    </style>
+</body>
+</html>
