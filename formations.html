@@ -208,10 +208,10 @@
                                     <div class="form-group">
                                         <label for="editPays">Pays</label>
                                         <select id="editPays">
-                                            <option value="France">France</option>
-                                            <option value="Belgique">Belgique</option>
-                                            <option value="Suisse">Suisse</option>
-                                            <option value="Luxembourg">Luxembourg</option>
+                                            <option value="France">Sénégal</option>
+                                            <option value="Belgique">Mali</option>
+                                            <option value="Suisse">Burkina</option>
+                                            <option value="Luxembourg">Guinné</option>
                                             <option value="Autre">Autre</option>
                                         </select>
                                     </div>
@@ -418,13 +418,13 @@
                 <div class="footer-column">
                     <h3>Support</h3>
                     <ul>
-                        <li><a href="mailto:support@formapius.fr">support@formapius.fr</a></li>
-                        <li><a href="tel:0123456789">01 23 45 67 89</a></li>
+                        <li><a href="mailto:support@formapius.fr">contact@iibs-sn.com</a></li>
+                        <li><a href="tel:0123456789">+221 77 440 03 03</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 FormaPlus. Tous droits réservés.</p>
+                <p>&copy; 2025 FormaPlus. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
@@ -493,15 +493,12 @@
                         const formationCard = this.createFormationCard(inscription);
                         formationsContainer.innerHTML += formationCard;
                     });
-                    
-                    // Mettre à jour le compteur
                     document.getElementById('userFormationsCount').textContent = snapshot.size;
                     
                 } catch (error) {
                     console.error('Error loading user formations:', error);
                 }
             }
-            
             createFormationCard(inscription) {
                 return `
                     <div class="formation-item">
@@ -536,8 +533,6 @@
                 document.getElementById('userName').textContent = this.currentUser.displayName || 'Utilisateur';
                 document.getElementById('userEmail').textContent = this.currentUser.email;
                 document.getElementById('welcomeName').textContent = this.currentUser.displayName?.split(' ')[0] || 'Utilisateur';
-                
-                // Avatar
                 const avatar = document.getElementById('userAvatar');
                 if (this.currentUser.photoURL) {
                     avatar.src = this.currentUser.photoURL;
@@ -546,95 +541,66 @@
             
             updateProfileDisplay() {
                 if (!this.userData) return;
-                
-                // Informations personnelles
                 document.getElementById('profileFullName').textContent = 
                     `${this.userData.prenom || ''} ${this.userData.nom || ''}`.trim() || 'Non renseigné';
                 document.getElementById('profileEmail').textContent = this.currentUser.email;
                 document.getElementById('profilePhone').textContent = this.userData.telephone || 'Non renseigné';
                 document.getElementById('profileJoinDate').textContent = 
                     this.userData.createdAt ? new Date(this.userData.createdAt.toDate()).toLocaleDateString() : 'Non renseigné';
-                
-                // Adresse
                 document.getElementById('profileAddress').textContent = this.userData.adresse || 'Non renseigné';
                 document.getElementById('profileCity').textContent = this.userData.ville || 'Non renseigné';
                 document.getElementById('profileZip').textContent = this.userData.codePostal || 'Non renseigné';
                 document.getElementById('profileCountry').textContent = this.userData.pays || 'Non renseigné';
-            }
-            
+            }          
             setupEventListeners() {
-                // Navigation
                 document.querySelectorAll('.dashboard-nav a').forEach(link => {
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
-                        
-                        // Gestion de la déconnexion
                         if (link.id === 'logoutBtn') {
                             logoutUser();
                             return;
                         }
-                        
                         const target = link.getAttribute('href');
                         this.showSection(target);
                     });
                 });
-                
-                // Tabs des formations
                 document.querySelectorAll('.tab-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const tab = btn.dataset.tab;
                         this.showFormationTab(tab);
                     });
                 });
-                
-                // Édition du profil
                 document.getElementById('editProfileBtn').addEventListener('click', () => {
                     this.showEditProfileModal();
                 });
-                
-                // Formulaire d'édition
                 document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
                     e.preventDefault();
                     await this.saveProfile();
                 });
-                
-                // Modals
                 document.querySelectorAll('.close-modal').forEach(btn => {
                     btn.addEventListener('click', () => {
                         document.getElementById('editProfileModal').style.display = 'none';
                     });
                 });
-                
-                // Menu mobile
                 document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
                     document.querySelector('.nav-links').classList.toggle('active');
                 });
             }
-            
             showSection(sectionId) {
-                // Masquer toutes les sections
                 document.querySelectorAll('.dashboard-section').forEach(section => {
                     section.classList.remove('active');
                 });
-                
-                // Retirer la classe active de tous les liens
                 document.querySelectorAll('.dashboard-nav a').forEach(link => {
                     link.classList.remove('active');
                 });
-                
-                // Afficher la section cible
                 const targetSection = document.querySelector(sectionId);
                 if (targetSection) {
                     targetSection.classList.add('active');
                 }
-                
-                // Ajouter la classe active au lien cliqué
                 const activeLink = document.querySelector(`.dashboard-nav a[href="${sectionId}"]`);
                 if (activeLink) {
                     activeLink.classList.add('active');
                 }
-                
-                // Charger les données de la section si nécessaire
                 switch(sectionId) {
                     case '#formations':
                         this.loadUserFormations();
@@ -652,15 +618,12 @@
             }
             
             showFormationTab(tab) {
-                // Mettre à jour les boutons
                 document.querySelectorAll('.tab-btn').forEach(btn => {
                     btn.classList.remove('active');
                     if (btn.dataset.tab === tab) {
                         btn.classList.add('active');
                     }
                 });
-                
-                // Afficher le contenu
                 document.querySelectorAll('.tab-pane').forEach(pane => {
                     pane.classList.remove('active');
                     if (pane.id === tab) {
@@ -668,9 +631,7 @@
                     }
                 });
             }
-            
             showEditProfileModal() {
-                // Remplir le formulaire avec les données actuelles
                 if (this.userData) {
                     document.getElementById('editNom').value = this.userData.nom || '';
                     document.getElementById('editPrenom').value = this.userData.prenom || '';
@@ -678,10 +639,8 @@
                     document.getElementById('editAdresse').value = this.userData.adresse || '';
                     document.getElementById('editVille').value = this.userData.ville || '';
                     document.getElementById('editCodePostal').value = this.userData.codePostal || '';
-                    document.getElementById('editPays').value = this.userData.pays || 'France';
+                    document.getElementById('editPays').value = this.userData.pays || 'Sénégal';
                 }
-                
-                // Afficher le modal
                 document.getElementById('editProfileModal').style.display = 'flex';
             }
             
@@ -703,26 +662,15 @@
                         pays: document.getElementById('editPays').value,
                         updatedAt: new Date()
                     };
-                    
-                    // Mettre à jour dans Firestore
                     await db.collection('users').doc(this.currentUser.uid).update(updatedData);
-                    
-                    // Mettre à jour le nom d'affichage
                     await this.currentUser.updateProfile({
                         displayName: `${updatedData.prenom} ${updatedData.nom}`
                     });
-                    
-                    // Recharger les données
                     this.userData = { ...this.userData, ...updatedData };
                     this.updateUserDisplay();
                     this.updateProfileDisplay();
-                    
-                    // Fermer le modal
                     document.getElementById('editProfileModal').style.display = 'none';
-                    
-                    // Afficher une notification
                     this.showNotification('Profil mis à jour avec succès', 'success');
-                    
                 } catch (error) {
                     console.error('Error updating profile:', error);
                     this.showNotification('Erreur lors de la mise à jour', 'error');
@@ -731,9 +679,7 @@
                     submitBtn.textContent = originalText;
                 }
             }
-            
             async loadCertifications() {
-                // Implémenter le chargement des certifications
                 const container = document.getElementById('certificationsList');
                 if (container) {
                     container.innerHTML = `
@@ -754,9 +700,7 @@
                     document.getElementById('userCertificationsCount').textContent = '1';
                 }
             }
-            
             async loadPayments() {
-                // Implémenter le chargement des paiements
                 const container = document.getElementById('paymentsHistory');
                 if (container) {
                     container.innerHTML = `
@@ -774,11 +718,8 @@
                     `;
                 }
             }
-            
             async loadMessages() {
-                // Implémenter le chargement des messages
             }
-            
             showNotification(message, type = 'info') {
                 const notification = document.createElement('div');
                 notification.className = `dashboard-notification notification-${type}`;
@@ -813,20 +754,13 @@
                     notification.remove();
                 });
             }
-            
-            // Méthodes pour les boutons
             viewFormationDetails(inscriptionId) {
-                // Voir les détails d'une formation
                 alert(`Voir les détails de l'inscription ${inscriptionId}`);
             }
-            
             accessFormation(inscriptionId) {
-                // Accéder à une formation
                 alert(`Accéder à la formation de l'inscription ${inscriptionId}`);
             }
         }
-        
-        // Initialiser le dashboard
         const dashboard = new DashboardManager();
     </script>
     
